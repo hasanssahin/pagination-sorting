@@ -20,12 +20,7 @@ public class PersonelController extends BaseController {
 
     @GetMapping("/list/pageable")
     public RootEntity<CustomPageEntity<DtoPersonel>> findAllPageable(@ModelAttribute PageableRequest pageableRequest) {
-        //findAllPageable metodu Pageable türünde nesne alır ve Page nesnesi döner
-        //Bu nedenle PageableRequest nesnesini Pageable türüne çevirip (toPageable ile) findAllPageable metoduna gönderiyoruz
         Page<Personel> page = personelService.findAllPageable(toPageable(pageableRequest));
-        //Page nesnesini CustomPage nesnesine çevirip döndürüyoruz
-        //Çünkü Page nesnesi döndürmek istemediğimiz alanları içeriyor
-        //Direkt olarak veritabanından dönen değeri content alanına atmaktansa DtoPersonel listesine çevirip döndürmek istiyoruz.
         CustomPageEntity<DtoPersonel> customPageEntityResponse = toCustomPageResponse(page, personelService.toDtoList(page.getContent()));
         return ok(customPageEntityResponse);
     }
